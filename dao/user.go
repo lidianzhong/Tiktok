@@ -17,6 +17,16 @@ var (
 	ErrorInsertFailed  = errors.New("插入数据失败")
 )
 
+// 根据用户Id查找用户是否存在
+func FindUserById(user_id int64) (*models.User, error) {
+	var user *models.User
+	err := util.DB.Where("user_id = ?", user_id).First(&user).Error
+	if err != nil {
+		log.Println(err.Error())
+	}
+	return user, err
+}
+
 // 根据用户名查找用户是否存在
 func FindUserByName(username string) (models.RegisterForm, error) {
 	var user models.RegisterForm

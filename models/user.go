@@ -25,3 +25,8 @@ type LoginForm struct {
 	UserName string `gorm:"varchar(32);unique;not null" json:"username" binding:"required"`
 	Password string `gorm:"varchar(32);not null" json:"password" binding:"required"`
 }
+
+type UserForm struct {
+	UserId int64
+	Token  string `gorm:"type:varchar(32);not null"`
+}

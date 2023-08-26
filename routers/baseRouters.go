@@ -13,7 +13,7 @@ func BaseRoutersInit(r *gin.Engine) {
 		baseRouters.POST("/publish/action/", middleware.JWTMiddleWare(), controller.PublishVideoController)
 		baseRouters.POST("/user/register", controller.Register)
 		baseRouters.POST("/user/login", controller.Login)
-		//baseRouters.GET("/user", controller.UserInfo)
+		baseRouters.GET("/user", middleware.JWTMiddleWare(), controller.UserInfo)
 	}
 
 }

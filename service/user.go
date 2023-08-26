@@ -42,3 +42,11 @@ func Login(form *models.LoginForm) (user *models.User, error error) {
 	user.Token = token
 	return
 }
+
+func GetUserInfo(form *models.UserForm) (user *models.User, error error) {
+	user, err := dao.FindUserById(form.UserId)
+	if err != nil {
+		return nil, err
+	}
+	return user, err
+}
