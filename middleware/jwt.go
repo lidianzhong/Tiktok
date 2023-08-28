@@ -16,13 +16,17 @@ const (
 )
 
 type MyClaims struct {
-	UserId int64
+	UserId   int64
+	UserName string
+	Password string
 	jwt.RegisteredClaims
 }
 
-func CreateToken(userid int64) (string, error) {
+func CreateToken(userid int64, username string, password string) (string, error) {
 	claim := MyClaims{
-		UserId: userid,
+		UserId:   userid,
+		UserName: username,
+		Password: password,
 		RegisteredClaims: jwt.RegisteredClaims{
 			NotBefore: jwt.NewNumericDate(time.Now()),                                     // 生效
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(TokenMaxExpireHour * time.Hour)), // 失效

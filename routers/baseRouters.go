@@ -11,6 +11,9 @@ func BaseRoutersInit(r *gin.Engine) {
 	{
 		baseRouters.GET("/feed", middleware.JWTMiddleWare(), controller.Feed)
 		baseRouters.POST("/publish/action/", middleware.JWTMiddleWare(), controller.PublishVideoController)
+		baseRouters.POST("/user/register", controller.Register)
+		baseRouters.POST("/user/login", controller.Login)
+		baseRouters.GET("/user", middleware.JWTMiddleWare(), controller.UserInfo)
 	}
 
 }

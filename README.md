@@ -14,10 +14,15 @@
     |   |-- common.go
     |   |-- feed.go
     |   |-- publish_video.go
+    |-- dao                     `数据库映射文件`
+    |   |-- user.go
     |
     |-- middleware              `中间件`
     |   |-- jwt.go
     |   |-- jwt_test.go
+    |
+    |-- models                  `模型`
+    |   |-- user.go
     |
     |-- routers                 `保存路由信息`
     |   |-- baseRouters.go
