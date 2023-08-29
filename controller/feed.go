@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"tiktok/middleware"
 	"tiktok/service"
 	"tiktok/util"
 	"time"
@@ -20,6 +21,31 @@ func Feed(c *gin.Context) {
 	// 返回参数
 	currentTimeStr := strconv.FormatInt(time.Now().Unix(), 10)
 	latestTime := c.DefaultQuery("latest_time", currentTimeStr)
+
+	tokenStr := c.Query("token")
+
+	//传入了token
+	if tokenStr != "" {
+		tokenStruck, err := middleware.ParseToken(tokenStr)
+		if err != nil {
+			c.JSON(http.StatusOK, Response{
+				StatusCode: 403,
+				StatusMsg:  "token不正确",
+			})
+			c.Abort() //阻止执行
+			return
+		}
+		//token超时
+		if tokenStruck.ExpiresAt.Time.Before(time.Now()) {
+			c.JSON(http.StatusOK, Response{
+				StatusCode: 402,
+				StatusMsg:  "token过期",
+			})
+			c.Abort() //阻止执行
+			return
+		}
+		c.Set("user_id", tokenStruck.UserId)
+	}
 
 	// FIXME 在第一次登录抖音时，会发回错误的 latest_time 数值，为了适应这个bug而做的改动
 	if len(latestTime) > 10 {

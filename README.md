@@ -14,6 +14,7 @@
     |   |-- common.go
     |   |-- feed.go
     |   |-- publish_video.go
+    |
     |-- dao                     `数据库映射文件`
     |   |-- user.go
     |
