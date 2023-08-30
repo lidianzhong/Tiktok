@@ -2,10 +2,9 @@ package dao
 
 import (
 	"errors"
+	"gorm.io/gorm"
 	"log"
-	"tiktok/models"
-	"tiktok/util"
-  "gorm.io/gorm"
+	"tiktok/model"
 )
 
 var (
@@ -19,57 +18,50 @@ var (
 )
 
 // 根据用户Id查找用户是否存在
-func FindUserById(user_id int64) (*models.User, error) {
-	var user *models.User
-	err := util.DB.Where("user_id = ?", user_id).First(&user).Error
+func FindUserById(user_id int64) (*model.User, error) {
+	var user *model.User
+	err := DB.Where("user_id = ?", user_id).First(&user).Error
 	if err != nil {
 		log.Println(err.Error())
 	}
 	return user, err
 }
 
-
-
 // 根据用户名查找用户是否存在
-func FindUserByName(username string) (*models.RegisterForm, error) {
-    var user models.RegisterForm
+func FindUserByName(username string) (*model.RegisterForm, error) {
+	var user model.RegisterForm
 
-    query := "SELECT * FROM register_forms WHERE username = ?"
-    result := util.DB.Raw(query, username).First(&user)
-    
-    if result.Error != nil {
-        if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-            log.Println("User not found:", username)
-            return nil, errors.New(ErrorUserNotExit)
-        }
-        log.Println("Error querying database:", result.Error)
-        return nil, result.Error
-    }
+	query := "SELECT * FROM register_forms WHERE username = ?"
+	result := DB.Raw(query, username).First(&user)
 
-    return &user, nil
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			log.Println("User not found:", username)
+			return nil, errors.New(ErrorUserNotExit)
+		}
+		log.Println("Error querying database:", result.Error)
+		return nil, result.Error
+	}
+
+	return &user, nil
 }
 
-
-
-
 // 添加新用户
-func InsertUser(user *models.User) error {
-	err := util.DB.Create(&user).Error
+func InsertUser(user *model.User) error {
+	err := DB.Create(&user).Error
 	return err
 }
 
-func InsertRegisterForm(user *models.RegisterForm) error {
-    err := util.DB.Create(user).Error
-    return err
+func InsertRegisterForm(user *model.RegisterForm) error {
+	err := DB.Create(user).Error
+	return err
 }
 
-func Login(username string) (*models.User, error) {
-	var user models.User
-	result := util.DB.Where(&models.User{UserName: username}).Find(&user)
+func Login(username string) (*model.User, error) {
+	var user model.User
+	result := DB.Where(&model.User{UserName: username}).Find(&user)
 	if result.RowsAffected > 0 {
 		return &user, nil
 	}
 	return nil, errors.New(ErrorUserNotExit)
 }
-
-

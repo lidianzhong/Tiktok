@@ -1,13 +1,13 @@
 package controller
 
 import (
+	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"tiktok/dao"
-	"tiktok/models"
+	"tiktok/model"
 	"tiktok/service"
-  "tiktok/middleware"
-	"github.com/gin-gonic/gin"
+	"tiktok/util"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
@@ -26,19 +26,18 @@ import (
 var userIdSequence = int64(1)
 
 type UserLoginResponse struct {
-	Response
+	util.Response
 	UserId int64  `json:"user_id,omitempty"`
 	Token  string `json:"token"`
 }
 
 type UserResponse struct {
-	Response
-	User models.User `json:"user"`
+	util.Response
+	User model.User `json:"user"`
 }
 
-
 func Register(c *gin.Context) {
-	var req models.RegisterForm
+	var req model.RegisterForm
 
 	// 从 URL 查询参数中获取用户名和密码
 	username := c.Query("username")
@@ -48,27 +47,26 @@ func Register(c *gin.Context) {
 	req.UserName = username
 	req.Password = password
 
-   userId, token, err := service.Register(req)
-    if err != nil {
-        log.Println("注册失败", err)
-        c.JSON(http.StatusOK, UserLoginResponse{
-            Response: Response{StatusCode: 2, StatusMsg: "用户已存在"},
-        })
-        return
-    }
+	userId, token, err := service.Register(req)
+	if err != nil {
+		log.Println("注册失败", err)
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: util.Response{StatusCode: 2, StatusMsg: "用户已存在"},
+		})
+		return
+	}
 
-    c.JSON(http.StatusOK, UserLoginResponse{
-        Response: Response{StatusCode: 0},
-        UserId:   userId,
-        Token:    token,
-    })
+	c.JSON(http.StatusOK, UserLoginResponse{
+		Response: util.Response{StatusCode: 0},
+		UserId:   userId,
+		Token:    token,
+	})
 }
-
 
 func Login(c *gin.Context) {
 	log.Println("Login request received")
 
-	u := &models.LoginForm{}
+	u := &model.LoginForm{}
 
 	log.Println("URL:", c.Request.URL.String())
 	log.Println("Params:", c.Request.URL.Query())
@@ -118,40 +116,39 @@ func Login(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
-    // var u models.UserForm
-  
-    log.Println("URL 参数 user_id:", c.Query("user_id"))
-    log.Println("URL 参数 token:", c.Query("token"))
-  
-    // 手动解析参数
-    token := c.Query("token")
-    
-    // 验证 token，您可以在此处添加验证逻辑
-    claims, err := middleware.ParseToken(token)
-    if err != nil {
-        log.Println("Token 验证失败", err)
-        c.JSON(http.StatusOK, UserResponse{
-            Response: Response{StatusCode: 5, StatusMsg: "Token 验证失败"},
-        })
-        return
-    }
-    
-    // 使用解析后的 claims 数据获取用户信息
-    userInfo, err := service.GetUserInfo(&models.UserForm{
-        UserId: claims.UserId, // 使用解析后的用户 ID
-        Token:  token,
-    })
-    if err != nil {
-        log.Println("获取用户信息失败", err)
-        c.JSON(http.StatusOK, UserResponse{
-            Response: Response{StatusCode: 3, StatusMsg: "用户不存在"},
-        })
-        return
-    }
+	// var u model.UserForm
 
-    c.JSON(http.StatusOK, UserResponse{
-        Response: Response{StatusCode: 0},
-        User:     *userInfo,
-    })
+	log.Println("URL 参数 user_id:", c.Query("user_id"))
+	log.Println("URL 参数 token:", c.Query("token"))
+
+	// 手动解析参数
+	token := c.Query("token")
+
+	// 验证 token，您可以在此处添加验证逻辑
+	claims, err := util.ParseToken(token)
+	if err != nil {
+		log.Println("Token 验证失败", err)
+		c.JSON(http.StatusOK, UserResponse{
+			Response: util.Response{StatusCode: 5, StatusMsg: "Token 验证失败"},
+		})
+		return
+	}
+
+	// 使用解析后的 claims 数据获取用户信息
+	userInfo, err := service.GetUserInfo(&model.UserForm{
+		UserId: claims.UserId, // 使用解析后的用户 ID
+		Token:  token,
+	})
+	if err != nil {
+		log.Println("获取用户信息失败", err)
+		c.JSON(http.StatusOK, UserResponse{
+			Response: util.Response{StatusCode: 3, StatusMsg: "用户不存在"},
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, UserResponse{
+		Response: util.Response{StatusCode: 0},
+		User:     *userInfo,
+	})
 }
-

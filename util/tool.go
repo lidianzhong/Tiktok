@@ -9,11 +9,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"tiktok/config"
 	"time"
 )
-
-var IP = os.Getenv("MYSQL_HOST")
-var Port = os.Getenv("MYSQL_PORT")
 
 var supportedFormats = map[string]struct{}{
 	".mp4": {},
@@ -37,7 +35,7 @@ func ConvertTimestampStrToUnix(timestampStr string) (time.Time, error) {
 
 // GetDataUrl 通过文件名获取对应url
 func GetDataUrl(name string) string {
-	url := fmt.Sprintf("http://%s:%d/static/%s", IP, Port, name)
+	url := fmt.Sprintf("http://%s:%d/static/%s", config.MysqlHost, config.MysqlPort, name)
 	return url
 }
 

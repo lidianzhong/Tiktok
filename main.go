@@ -2,14 +2,31 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"tiktok/routers"
+	"os"
+	"tiktok/dao"
+	"tiktok/router"
 )
 
 func main() {
+	if err := Init(); err != nil {
+		os.Exit(-1)
+	}
+
 	r := gin.Default()
 
-	routers.BaseRoutersInit(r)
+	// 基础接口路由
+	router.BaseRoutersInit(r)
 
-	r.Run()
+	err := r.Run()
+	if err != nil {
+		return
+	}
 
+}
+
+func Init() error {
+	if err := dao.Init(); err != nil {
+		return err
+	}
+	return nil
 }

@@ -1,8 +1,8 @@
-package models
+package model
 
 type User struct {
-  UserId          int64
-  UserName        string `gorm:"column:username;type:varchar(32);unique"`
+	UserId          int64
+	UserName        string `gorm:"column:username;type:varchar(32);unique"`
 	Password        string `gorm:"type:varchar(32);not null"`
 	Token           string `gorm:not null"`
 	FollowCount     uint   `gorm:"default:0;"`
@@ -26,9 +26,7 @@ type LoginForm struct {
 	Password string `gorm:"varchar(32);not null" binding:"required"`
 }
 
-
 type UserForm struct {
-    UserId int64 `form:"user_id"`
-    Token  string `form:"token" binding:"required"`
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token" binding:"required"`
 }
-

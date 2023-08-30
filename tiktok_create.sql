@@ -49,8 +49,49 @@ CREATE TABLE `video`  (
 -- ----------------------------
 -- Records of video
 -- ----------------------------
-INSERT INTO `video` VALUES (9, 1, 'http://vfx.mtime.cn/Video/2021/07/10/mp4/210710094507540173.mp4', 'https://www.helloimg.com/images/2023/08/29/oiEHNM.jpg', 100, 1000, 1, 'Big Buck', '2023-08-22 15:04:25');
-INSERT INTO `video` VALUES (10, 1, 'http://www.w3school.com.cn/example/html5/mov_bbb.mp4', 'https://www.helloimg.com/images/2023/08/29/oiEHNM.jpg', 200, 2000, 0, 'Butterfly', '2023-08-23 15:05:50');
-INSERT INTO `video` VALUES (11, 1, 'https://media.w3.org/2010/05/sintel/trailer.mp4', 'https://www.helloimg.com/images/2023/08/29/oiEHNM.jpg', 300, 3000, 0, 'Snow Mountain', '2023-08-08 15:06:51');
+INSERT INTO `video` VALUES (1, 1, 'http://vfx.mtime.cn/Video/2021/07/10/mp4/210710094507540173.mp4', 'https://www.helloimg.com/images/2023/08/29/oiEHNM.jpg', 100, 1000, 1, 'Big Buck', '2023-08-22 15:04:25');
+INSERT INTO `video` VALUES (2, 1, 'http://www.w3school.com.cn/example/html5/mov_bbb.mp4', 'https://www.helloimg.com/images/2023/08/29/oiEHNM.jpg', 200, 2000, 0, 'Butterfly', '2023-08-23 15:05:50');
+INSERT INTO `video` VALUES (3, 1, 'https://media.w3.org/2010/05/sintel/trailer.mp4', 'https://www.helloimg.com/images/2023/08/29/oiEHNM.jpg', 300, 3000, 0, 'Snow Mountain', '2023-08-08 15:06:51');
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ----------------------------
+-- Table structure for users
+-- ----------------------------
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE users (
+    user_id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userName         VARCHAR(32) UNIQUE NOT NULL,
+    password         VARCHAR(32)        NOT NULL,
+    token            VARCHAR(32)        NOT NULL,
+    follow_count     INT     DEFAULT 0,
+    follower_count   INT     DEFAULT 0,
+    is_follow        BOOLEAN DEFAULT false,
+    avatar           VARCHAR(255),
+    background_image VARCHAR(255),
+    signature        VARCHAR(255),
+    total_favorited  VARCHAR(255),
+    work_count       INT     DEFAULT 0,
+    favorite_count   INT     DEFAULT 0
+);
+
+-- ----------------------------
+-- 创建注册表单记录表
+-- ----------------------------
+CREATE TABLE register_forms (
+    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userName VARCHAR(32) UNIQUE NOT NULL,
+    password VARCHAR(32)        NOT NULL
+);
+
+
+-- ----------------------------
+-- 创建登录表单记录表
+-- ----------------------------
+CREATE TABLE login_forms (
+    id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userName VARCHAR(32) UNIQUE NOT NULL,
+    password VARCHAR(32)        NOT NULL
+);
+
+

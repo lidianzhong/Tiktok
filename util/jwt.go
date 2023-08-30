@@ -1,10 +1,10 @@
-package middleware
+package util
 
 import (
 	"errors"
-	"time"
-  "log"
 	"github.com/golang-jwt/jwt/v4"
+	"log"
+	"time"
 )
 
 var MySecret = []byte("Let's Go Home")
@@ -22,7 +22,7 @@ type MyClaims struct {
 
 func CreateToken(userid int64, username string, password string) (string, error) {
 	// log.Println("调用了 CreateToken")
-  claim := MyClaims{
+	claim := MyClaims{
 		UserId:   userid,
 		UserName: username,
 		Password: password,
@@ -36,12 +36,12 @@ func CreateToken(userid int64, username string, password string) (string, error)
 
 	s, err := token.SignedString(MySecret)
 	if err != nil {
-    log.Println("Token 生成错误:", err)
+		log.Println("Token 生成错误:", err)
 		return "", err
 	}
-  
-  // log.Println("生成的 Token:", s)
-  
+
+	// log.Println("生成的 Token:", s)
+
 	return s, nil
 }
 
@@ -50,10 +50,10 @@ func ParseToken(s string) (*MyClaims, error) {
 		return MySecret, nil
 	})
 	if err != nil {
-    log.Println("Token 解析错误:", err)
+		log.Println("Token 解析错误:", err)
 		return nil, err
 	}
-  // log.Println("解析后的 Token:", token)
+	// log.Println("解析后的 Token:", token)
 	if !token.Valid {
 		return nil, errors.New("claim invalid")
 	}
