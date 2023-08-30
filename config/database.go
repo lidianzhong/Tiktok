@@ -1,11 +1,5 @@
 package config
 
-import (
-	"gorm.io/gorm"
-)
-
-var DB *gorm.DB
-
 // 1024code 中从环境变量获取值
 
 //var MysqlUsername = os.Getenv("MYSQL_USER")

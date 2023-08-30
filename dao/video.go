@@ -2,7 +2,6 @@ package dao
 
 import (
 	"sync"
-	"tiktok/config"
 	"tiktok/model"
 	"time"
 )
@@ -21,7 +20,7 @@ func NewVideoDaoInstance() *VideoDao {
 }
 
 func (*VideoDao) CreateVideo(video *model.Video) error {
-	if err := config.DB.Create(video).Error; err != nil {
+	if err := DB.Create(video).Error; err != nil {
 		return err
 	}
 	return nil

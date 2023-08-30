@@ -35,7 +35,7 @@ func ConvertTimestampStrToUnix(timestampStr string) (time.Time, error) {
 
 // GetDataUrl 通过文件名获取对应url
 func GetDataUrl(name string) string {
-	url := fmt.Sprintf("http://%s:%d/static/%s", config.MysqlHost, config.MysqlPort, name)
+	url := fmt.Sprintf("%s/static/%s", config.IP, name)
 	return url
 }
 

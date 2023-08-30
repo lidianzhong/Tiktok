@@ -8,6 +8,8 @@ import (
 )
 
 func BaseRoutersInit(r *gin.Engine) {
+
+	r.Static("static", "./static")
 	baseRouters := r.Group("/douyin")
 	{
 		baseRouters.GET("/feed/", controller.Feed)
