@@ -1,26 +1,41 @@
-# simple-demo
+## 极简版抖音
 
-## 抖音项目服务端简单示例
-
-具体功能内容参考飞书说明文档
-
-工程无其他依赖，直接编译运行即可
-
-```shell
-go build && ./simple-demo
+### Tiktok项目结构
 ```
-
-### 功能说明
-
-接口功能不完善，仅作为示例
-
-* 用户登录数据保存在内存中，单次运行过程中有效
-* 视频上传后会保存到本地 public 目录中，访问时用 127.0.0.1:8080/static/video_name 即可
-
-### 测试
-
-test 目录下为不同场景的功能测试case，可用于验证功能实现正确性
-
-其中 common.go 中的 _serverAddr_ 为服务部署的地址，默认为本机地址，可以根据实际情况修改
-
-测试数据写在 demo_data.go 中，用于列表接口的 mock 测试
+├── config
+│   ├── app.go              应用配置
+│   └── database.go         数据库配置
+│
+├── controller              Controller层
+│   ├── feed.go
+│   ├── publish_video.go
+│   ├── publish_video_test.go
+│   └── user.go
+│
+├── dao                     Dao层
+│   ├── db_init.go
+│   ├── user.go
+│   └── video.go
+│
+├── middleware              中间件层
+│   └── middle.go
+│
+├── model                   模型
+│   ├── author.go
+│   ├── user.go
+│   └── video.go
+│
+├── router                  路由
+│   └── baseRouters.go
+│
+├── service                 Service层
+│   ├── feed.go
+│   ├── publish_video.go
+│   └── user.go
+│
+├── static                  静态文件
+│   ├── 0_1693.mp4
+│   └── 0_1693.png
+│
+├── main.go
+├── tiktok_create.sql
