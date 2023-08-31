@@ -60,7 +60,7 @@ func Feed(c *gin.Context) {
 	}
 
 	// 调用service层获取videoList
-	videoList, err := dao.NewVideoDaoInstance().QueryFeedVideoList(postTime)
+	videoList, err := dao.QueryFeedVideoList(postTime)
 	if err != nil {
 		FeedErrorResponse(c, err.Error())
 	}

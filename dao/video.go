@@ -1,7 +1,9 @@
 package dao
 
 import (
+	"gorm.io/gorm"
 	"sync"
+	"tiktok/config"
 	"tiktok/model"
 	"time"
 )
@@ -33,7 +35,7 @@ func (*VideoDao) QueryVideoCountByUserId(userId int64, count *int64) error {
 	return nil
 }
 
-func (*VideoDao) QueryFeedVideoList(postTime time.Time) ([]model.Video, error) {
+func QueryFeedVideoList(postTime time.Time) ([]model.Video, error) {
 	// 从数据库中取videoList数据
 	var videoList []model.Video
 	if err := DB.Preload("Author").Where("post_time < ?", postTime).Order("post_time desc").Limit(30).Find(&videoList).Error; err != nil {
@@ -41,4 +43,17 @@ func (*VideoDao) QueryFeedVideoList(postTime time.Time) ([]model.Video, error) {
 	}
 
 	return videoList, nil
+}
+
+func UpdateVideoURL() error {
+
+	newUrl := config.IP
+
+	if err := DB.Model(&model.Video{}).
+		Where("play_url LIKE ?", "%static%").
+		Update("play_url", gorm.Expr("REGEXP_REPLACE(play_url, ?, ?)", "^https:.*\\.com", newUrl)).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

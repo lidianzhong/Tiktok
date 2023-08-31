@@ -24,5 +24,11 @@ func Init() error {
 		PrepareStmt:            true,
 	})
 
-	return err
+	// 更新数据库中videoURL数据
+	err = UpdateVideoURL()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
